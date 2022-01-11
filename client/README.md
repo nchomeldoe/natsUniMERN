@@ -1,0 +1,1 @@
+This is Nat's University app, where students can register, view and edit or delete their profile. It is also possible to sign in as an admin (username and password both "admin") to view all students and edit and delete student records.
