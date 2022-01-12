@@ -1,7 +1,9 @@
 require("dotenv").config();
 const express = require("express");
-const router = require("./routes/students.js");
 const mongoose = require("mongoose");
+
+const studentsRouter = require("./routes/students.js");
+const subjectsRouter = require("./routes/subjects.js");
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -30,10 +32,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api", router);
-
-// /api/students . stu router
-// /subjects // subj router
+app.use("/api/students", studentsRouter);
+app.use("/api/subjects", subjectsRouter);
 
 app.get("/api", (req, res) => res.send("Welcome to my API!"));
 
