@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Field } from "formik";
 import {
   OutlinedInput,
@@ -12,19 +12,28 @@ import {
 } from "@mui/material";
 
 const SubjectFormField = ({ name, label, helpMessage }) => {
-  const taughtSubjects = [
-    "Accountancy",
-    "Biology",
-    "Classics",
-    "Creative Writing",
-    "Economics",
-    "French",
-    "Geography",
-    "German",
-    "Mathematics",
-    "Philosophy",
-    "Photography",
-  ];
+  const [taughtSubjects, setTaughtSubjects] = useState([]);
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/api/subjects/");
+        if (!res.ok) {
+          throw res;
+        }
+        const data = await res.json();
+        console.log(data);
+        const subjectNames = data.map((subject, i) => {
+          console.log("s", subject);
+          return subject.name;
+        });
+        console.log(subjectNames);
+        setTaughtSubjects(subjectNames);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchSubjects();
+  }, []);
 
   const [touched, setTouched] = useState(false);
 

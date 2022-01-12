@@ -5,7 +5,7 @@ import { navigate } from "@reach/router";
 
 import StudentCard from "../StudentCard/StudentCard";
 
-const ListView = () => {
+const StudentsListView = () => {
   const [students, setStudents] = useState(null);
   useEffect(() => {
     const fetchStudents = async () => {
@@ -56,4 +56,4 @@ const ListView = () => {
   );
 };
 
-export default ListView;
+export default StudentsListView;

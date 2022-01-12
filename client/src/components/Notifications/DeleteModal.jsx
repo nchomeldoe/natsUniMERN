@@ -34,7 +34,7 @@ const DeleteModal = ({ studentName, studentId, isSubmitting }) => {
           severity: "success",
           open: true,
         });
-        navigate(`/`);
+        navigate(`/studentList`);
       }
     } catch (err) {
       setSnack({
