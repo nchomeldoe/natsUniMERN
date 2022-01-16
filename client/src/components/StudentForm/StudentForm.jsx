@@ -5,7 +5,7 @@ import React from "react";
 
 import FormField from "./FormField";
 import SubjectFormField from "./SubjectFormField";
-import DeleteModal from "../Notifications/DeleteModal";
+import DeleteStudentModal from "../Modals/DeleteStudentModal";
 
 const StudentForm = ({
   initialValues,
@@ -95,7 +95,7 @@ const StudentForm = ({
               </div>
               {isExistingStudent ? (
                 <div>
-                  <DeleteModal
+                  <DeleteStudentModal
                     studentName={`${initialValues.firstName} ${initialValues.lastName}`}
                     studentId={studentId}
                     isSubmitting={isSubmitting}

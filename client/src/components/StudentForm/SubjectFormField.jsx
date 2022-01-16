@@ -21,12 +21,9 @@ const SubjectFormField = ({ name, label, helpMessage }) => {
           throw res;
         }
         const data = await res.json();
-        console.log(data);
         const subjectNames = data.map((subject, i) => {
-          console.log("s", subject);
           return subject.name;
         });
-        console.log(subjectNames);
         setTaughtSubjects(subjectNames);
       } catch (err) {
         console.error(err);

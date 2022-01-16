@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Container, Typography, Stack } from "@mui/material";
 import Loader from "react-loader-spinner";
 
+import SubjectCard from "../SubjectCard/SubjectCard";
+import AddSubjectModal from "../Modals/AddSubjectModal";
+
 const SubjectsListView = () => {
   const [subjects, setSubjects] = useState(null);
   useEffect(() => {
@@ -30,9 +33,14 @@ const SubjectsListView = () => {
         >
           <Typography variant="h5">Subjects</Typography>
           <div>
+            <AddSubjectModal
+            // isSubmitting={isSubmitting}
+            />
+          </div>
+          <div>
             {subjects ? (
-              subjects.map((subject, i) => (
-                <Typography key={`subject-${i}`}>{subject.name}</Typography>
+              subjects.map((subject) => (
+                <SubjectCard key={`subject-${subject._id}`} subject={subject} />
               ))
             ) : (
               <Loader type="Puff" color="#00BFFF" height={100} width={100} />

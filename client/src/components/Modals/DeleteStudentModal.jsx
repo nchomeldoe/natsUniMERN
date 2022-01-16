@@ -4,7 +4,7 @@ import { navigate } from "@reach/router";
 
 import { NotificationContext } from "../../context/NotificationProvider";
 
-const DeleteModal = ({ studentName, studentId, isSubmitting }) => {
+const DeleteStudentModal = ({ studentName, studentId, isSubmitting }) => {
   const { setSnack } = useContext(NotificationContext);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -77,6 +77,7 @@ const DeleteModal = ({ studentName, studentId, isSubmitting }) => {
           </Button>
           <Button
             variant="outlined"
+            color="secondary"
             onClick={handleCloseModal}
             disabled={isDeleting}
           >
@@ -88,4 +89,4 @@ const DeleteModal = ({ studentName, studentId, isSubmitting }) => {
   );
 };
 
-export default DeleteModal;
+export default DeleteStudentModal;
