@@ -1,19 +1,26 @@
 import React from "react";
-import { Card, CardContent, CardActionArea, Typography } from "@mui/material";
+import { Card, CardContent, Typography, IconButton, Box } from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const SubjectCard = ({ subject }) => {
   const { name } = subject;
   return (
     <div>
       <Card sx={{ mb: "5px", minWidth: "250px" }}>
-        <CardActionArea
-          sx={{ color: "black", textDecoration: "none" }}
-          //   onClick={handleClick}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
         >
           <CardContent>
             <Typography variant="h5">{name}</Typography>
           </CardContent>
-        </CardActionArea>
+          <IconButton>
+            <DeleteForeverIcon />
+          </IconButton>
+        </Box>
       </Card>
     </div>
   );

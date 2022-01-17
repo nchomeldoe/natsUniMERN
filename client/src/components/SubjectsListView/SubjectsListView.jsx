@@ -33,9 +33,7 @@ const SubjectsListView = () => {
         >
           <Typography variant="h5">Subjects</Typography>
           <div>
-            <AddSubjectModal
-            // isSubmitting={isSubmitting}
-            />
+            <AddSubjectModal />
           </div>
           <div>
             {subjects ? (

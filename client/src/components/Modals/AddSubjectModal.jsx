@@ -7,7 +7,6 @@ import {
   TextField,
   Stack,
 } from "@mui/material";
-import { navigate } from "@reach/router";
 
 import { NotificationContext } from "../../context/NotificationProvider";
 
@@ -29,8 +28,11 @@ const AddSubjectModal = () => {
   };
   const handleAdd = async () => {
     setIsAdding(true);
-    const formattedSubjectName =
-      subjectName.charAt(0).toUpperCase() + subjectName.slice(1).toLowerCase();
+    const subjectNameWords = subjectName.split(" ");
+    const formattedSubjectNameWords = subjectNameWords.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    });
+    const formattedSubjectName = formattedSubjectNameWords.join(" ");
     try {
       const res = await fetch(`http://localhost:4000/api/subjects/`, {
         method: "POST",
@@ -47,6 +49,7 @@ const AddSubjectModal = () => {
           severity: "error",
           open: true,
         });
+        setIsAdding(false);
         throw res;
       } else {
         setSnack({
@@ -54,6 +57,9 @@ const AddSubjectModal = () => {
           severity: "success",
           open: true,
         });
+        setIsAdding(false);
+        handleCloseModal();
+        window.location.reload();
       }
     } catch (err) {
       setSnack({
@@ -62,10 +68,8 @@ const AddSubjectModal = () => {
         open: true,
       });
       console.error(err);
+      setIsAdding(false);
     }
-    setIsAdding(false);
-    handleCloseModal();
-    window.location.reload();
   };
 
   return (
