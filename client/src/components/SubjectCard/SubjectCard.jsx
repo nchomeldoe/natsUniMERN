@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, IconButton, Box } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const SubjectCard = ({ subject }) => {
+  console.log("sub", subject);
   const { name } = subject;
   return (
     <div>

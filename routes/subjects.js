@@ -6,6 +6,6 @@ subjectsRouter.get("/", subjects.findAll);
 
 subjectsRouter.post("/", subjects.create);
 
-subjectsRouter.delete("/:name", subjects.destroy);
+subjectsRouter.delete("/:id", subjects.destroy);
 
 module.exports = subjectsRouter;

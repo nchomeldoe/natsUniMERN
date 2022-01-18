@@ -28,6 +28,16 @@ const find = (req, res) => {
     });
 };
 
+const findStudentsBySubject = (req, res) => {
+  Student.find({ subjects: req.params.subject.replace("_", " ") })
+    .then((results) => {
+      res.status(201).send(results);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
 const create = (req, res) => {
   const student = new Student(req.body);
   student
@@ -66,4 +76,11 @@ const modify = (req, res) => {
     });
 };
 
-module.exports = { findAll, find, create, destroy, modify };
+module.exports = {
+  findAll,
+  find,
+  create,
+  destroy,
+  modify,
+  findStudentsBySubject,
+};

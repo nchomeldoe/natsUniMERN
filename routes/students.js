@@ -6,6 +6,8 @@ studentsRouter.get("/", students.findAll);
 
 studentsRouter.get("/:id", students.find);
 
+studentsRouter.get("/subject/:subject", students.findStudentsBySubject);
+
 studentsRouter.post("/", students.create);
 
 studentsRouter.delete("/:id", students.destroy);
