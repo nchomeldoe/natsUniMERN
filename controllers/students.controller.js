@@ -31,7 +31,14 @@ const find = (req, res) => {
 const findStudentsBySubject = (req, res) => {
   Student.find({ subjects: req.params.subject.replace("_", " ") })
     .then((results) => {
-      res.status(201).send(results);
+      console.log(results);
+      const nameAndEmail = results.map((result) => {
+        return {
+          name: `${result.firstName} ${result.lastName}`,
+          email: `${result.email}`,
+        };
+      });
+      res.status(201).send(nameAndEmail);
     })
     .catch((err) => {
       console.error(err);

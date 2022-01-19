@@ -11,6 +11,7 @@ const studentSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     firstName: {
       type: String,
@@ -27,6 +28,11 @@ const studentSchema = new Schema(
   },
   { timestamps: true }
 );
+
+studentSchema.path("email").validate(async (email) => {
+  const emailCount = await mongoose.models.Student.countDocuments({ email });
+  return !emailCount;
+}, "Email already exists");
 
 const Student = mongoose.model("Student", studentSchema);
 

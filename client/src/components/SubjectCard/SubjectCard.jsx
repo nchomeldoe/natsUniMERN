@@ -1,6 +1,7 @@
 import React from "react";
-import { Card, CardContent, Typography, IconButton, Box } from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { Card, CardContent, Typography, Box } from "@mui/material";
+
+import DeleteSubjectModal from "../Modals/DeleteSubjectModal";
 
 const SubjectCard = ({ subject }) => {
   console.log("sub", subject);
@@ -18,9 +19,8 @@ const SubjectCard = ({ subject }) => {
           <CardContent>
             <Typography variant="h5">{name}</Typography>
           </CardContent>
-          <IconButton>
-            <DeleteForeverIcon />
-          </IconButton>
+
+          <DeleteSubjectModal subjectName={name} />
         </Box>
       </Card>
     </div>
