@@ -25,7 +25,7 @@ const create = (req, res) => {
 
 const destroy = (req, res) => {
   Subject.findByIdAndDelete(req.params.id)
-    .then((result) => {
+    .then(() => {
       res.status(204).send();
     })
     .catch((err) => {

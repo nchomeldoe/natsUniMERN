@@ -10,7 +10,8 @@ import {
 
 import { NotificationContext } from "../../context/NotificationProvider";
 
-const AddSubjectModal = () => {
+const AddSubjectModal = ({ fetchSubjects }) => {
+  console.log("fj", fetchSubjects);
   const { setSnack } = useContext(NotificationContext);
 
   const [subjectName, setSubjectName] = useState("");
@@ -49,7 +50,6 @@ const AddSubjectModal = () => {
           severity: "error",
           open: true,
         });
-        setIsAdding(false);
         throw res;
       } else {
         setSnack({
@@ -57,9 +57,8 @@ const AddSubjectModal = () => {
           severity: "success",
           open: true,
         });
-        setIsAdding(false);
         handleCloseModal();
-        window.location.reload();
+        fetchSubjects();
       }
     } catch (err) {
       setSnack({
@@ -68,8 +67,8 @@ const AddSubjectModal = () => {
         open: true,
       });
       console.error(err);
-      setIsAdding(false);
     }
+    setIsAdding(false);
   };
 
   return (

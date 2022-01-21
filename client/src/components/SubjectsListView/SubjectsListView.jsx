@@ -7,19 +7,20 @@ import AddSubjectModal from "../Modals/AddSubjectModal";
 
 const SubjectsListView = () => {
   const [subjects, setSubjects] = useState(null);
-  useEffect(() => {
-    const fetchSubjects = async () => {
-      try {
-        const res = await fetch("http://localhost:4000/api/subjects/");
-        if (!res.ok) {
-          throw res;
-        }
-        const data = await res.json();
-        setSubjects(data);
-      } catch (err) {
-        console.error(err);
+  const fetchSubjects = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/api/subjects/");
+      if (!res.ok) {
+        throw res;
       }
-    };
+      const data = await res.json();
+      setSubjects(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
     fetchSubjects();
   }, []);
 
@@ -33,12 +34,16 @@ const SubjectsListView = () => {
         >
           <Typography variant="h5">Subjects</Typography>
           <div>
-            <AddSubjectModal />
+            <AddSubjectModal fetchSubjects={fetchSubjects} />
           </div>
           <div>
             {subjects ? (
               subjects.map((subject) => (
-                <SubjectCard key={`subject-${subject._id}`} subject={subject} />
+                <SubjectCard
+                  key={`subject-${subject._id}`}
+                  subject={subject}
+                  fetchSubjects={fetchSubjects}
+                />
               ))
             ) : (
               <Loader type="Puff" color="#00BFFF" height={100} width={100} />

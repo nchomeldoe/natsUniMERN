@@ -26,15 +26,7 @@ const NewStudent = () => {
         },
         body: JSON.stringify(values),
       });
-      if (!res.ok) {
-        setSnack({
-          // handle backend errors
-          message: "Sorry, there was an error! Please try again.",
-          severity: "error",
-          open: true,
-        });
-        throw res;
-      } else {
+      if (res.ok) {
         const data = await res.json();
         const studentId = data._id;
         setSnack({
@@ -43,14 +35,36 @@ const NewStudent = () => {
           open: true,
         });
         navigate(`/student/${studentId}`);
+      } else {
+        // if error
+        const error = await res.json();
+        if (
+          // if email is duplicate
+          error.message &&
+          error.message ===
+            "Student validation failed: email: Email already exists"
+        ) {
+          setSnack({
+            message: "Sorry, that email is already taken!",
+            severity: "error",
+            open: true,
+          });
+        } else {
+          // if other error
+          setSnack({
+            message: "Sorry, there was an error! Please try again.",
+            severity: "error",
+            open: true,
+          });
+        }
       }
     } catch (err) {
+      console.error(err);
       setSnack({
         message: "Sorry, there was an error! Please try again.",
         severity: "error",
         open: true,
       });
-      console.error(err);
     }
   };
 

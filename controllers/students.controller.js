@@ -15,6 +15,7 @@ const findAll = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      res.status(500).send(err);
     });
 };
 
@@ -25,13 +26,13 @@ const find = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      res.status(500).send(err);
     });
 };
 
 const findStudentsBySubject = (req, res) => {
   Student.find({ subjects: req.params.subject.replace("_", " ") })
     .then((results) => {
-      console.log(results);
       const nameAndEmail = results.map((result) => {
         return {
           name: `${result.firstName} ${result.lastName}`,
@@ -42,6 +43,7 @@ const findStudentsBySubject = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      res.status(500).send(err);
     });
 };
 
@@ -53,7 +55,12 @@ const create = (req, res) => {
       res.status(201).send(result);
     })
     .catch((err) => {
+      console.log(err);
+      // is it the email error ?
+      // "error": "sorry this email taken"
+      // "error": "oops something went wrong"
       console.error(err);
+      res.status(500).send(err);
     });
 };
 
@@ -64,6 +71,7 @@ const destroy = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      res.status(500).send(err);
     });
 };
 
@@ -80,6 +88,7 @@ const modify = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      res.status(500).send(err);
     });
 };
 
