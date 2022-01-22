@@ -20,21 +20,19 @@ const DeleteStudentModal = ({ studentName, studentId, isSubmitting }) => {
         `http://localhost:4000/api/students/${studentId}`,
         { method: "DELETE" }
       );
-      if (!res.ok) {
-        setSnack({
-          // handle backend errors
-          message: "Sorry, there was an error! Please try again.",
-          severity: "error",
-          open: true,
-        });
-        throw res;
-      } else {
+      if (res.ok) {
         setSnack({
           message: `${studentName} has been deleted!`,
           severity: "success",
           open: true,
         });
         navigate(`/studentList`);
+      } else {
+        setSnack({
+          message: "Sorry, there was an error! Please try again.",
+          severity: "error",
+          open: true,
+        });
       }
     } catch (err) {
       setSnack({

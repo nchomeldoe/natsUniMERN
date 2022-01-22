@@ -55,12 +55,19 @@ const create = (req, res) => {
       res.status(201).send(result);
     })
     .catch((err) => {
-      console.log(err);
-      // is it the email error ?
-      // "error": "sorry this email taken"
-      // "error": "oops something went wrong"
       console.error(err);
-      res.status(500).send(err);
+      if (
+        err.errors.email &&
+        err.errors.email.properties.message === "Email already exists"
+      ) {
+        res
+          .status(409)
+          .send({ message: "Sorry, that email address is aleady taken!" });
+      } else {
+        res
+          .status(500)
+          .send({ message: "Sorry, there was an error! Please try again." });
+      }
     });
 };
 
@@ -88,7 +95,15 @@ const modify = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send(err);
+      if (err.codeName && err.codeName === "DuplicateKey") {
+        res
+          .status(409)
+          .send({ message: "Sorry, that email address is aleady taken!" });
+      } else {
+        res
+          .status(500)
+          .send({ message: "Sorry, there was an error! Please try again." });
+      }
     });
 };
 

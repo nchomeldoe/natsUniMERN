@@ -11,7 +11,6 @@ import {
 import { NotificationContext } from "../../context/NotificationProvider";
 
 const AddSubjectModal = ({ fetchSubjects }) => {
-  console.log("fj", fetchSubjects);
   const { setSnack } = useContext(NotificationContext);
 
   const [subjectName, setSubjectName] = useState("");
@@ -43,15 +42,7 @@ const AddSubjectModal = ({ fetchSubjects }) => {
         },
         body: JSON.stringify({ name: formattedSubjectName }),
       });
-      if (!res.ok) {
-        setSnack({
-          // handle backend errors
-          message: "Sorry, there was an error! Please try again.",
-          severity: "error",
-          open: true,
-        });
-        throw res;
-      } else {
+      if (res.ok) {
         setSnack({
           message: `${subjectName} has been created!`,
           severity: "success",
@@ -59,14 +50,21 @@ const AddSubjectModal = ({ fetchSubjects }) => {
         });
         handleCloseModal();
         fetchSubjects();
+      } else {
+        const error = await res.json();
+        setSnack({
+          message: error.message,
+          severity: "error",
+          open: true,
+        });
       }
     } catch (err) {
+      console.error(err);
       setSnack({
         message: "Sorry, there was an error! Please try again.",
         severity: "error",
         open: true,
       });
-      console.error(err);
     }
     setIsAdding(false);
   };

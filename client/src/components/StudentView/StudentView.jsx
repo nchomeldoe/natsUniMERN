@@ -42,21 +42,20 @@ const StudentView = () => {
           body: JSON.stringify(values),
         }
       );
-      if (!res.ok) {
-        setSnack({
-          // handle backend errors
-          message: "Sorry, there was an error! Please try again.",
-          severity: "error",
-          open: true,
-        });
-        throw res;
-      } else {
+      if (res.ok) {
         setSnack({
           message: `${values.firstName} ${values.lastName} has been updated!`,
           severity: "success",
           open: true,
         });
         window.location.reload();
+      } else {
+        const error = await res.json();
+        setSnack({
+          message: error.message,
+          severity: "error",
+          open: true,
+        });
       }
     } catch (err) {
       setSnack({

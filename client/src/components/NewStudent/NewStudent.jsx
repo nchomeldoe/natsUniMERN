@@ -36,27 +36,12 @@ const NewStudent = () => {
         });
         navigate(`/student/${studentId}`);
       } else {
-        // if error
         const error = await res.json();
-        if (
-          // if email is duplicate
-          error.message &&
-          error.message ===
-            "Student validation failed: email: Email already exists"
-        ) {
-          setSnack({
-            message: "Sorry, that email is already taken!",
-            severity: "error",
-            open: true,
-          });
-        } else {
-          // if other error
-          setSnack({
-            message: "Sorry, there was an error! Please try again.",
-            severity: "error",
-            open: true,
-          });
-        }
+        setSnack({
+          message: error.message,
+          severity: "error",
+          open: true,
+        });
       }
     } catch (err) {
       console.error(err);

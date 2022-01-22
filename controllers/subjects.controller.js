@@ -8,6 +8,7 @@ const findAll = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      res.status(500).send(err);
     });
 };
 
@@ -20,6 +21,18 @@ const create = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      if (
+        err.errors.name &&
+        err.errors.name.properties.message === "Name already exists"
+      ) {
+        res
+          .status(409)
+          .send({ message: "Sorry, that subject already exists!" });
+      } else {
+        res
+          .status(500)
+          .send({ message: "Sorry, there was an error! Please try again." });
+      }
     });
 };
 
@@ -30,6 +43,7 @@ const destroy = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      res.status(500).send(err);
     });
 };
 
