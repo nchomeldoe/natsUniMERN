@@ -22,7 +22,7 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
     const fetchStudentDetails = async () => {
       try {
         const res = await fetch(
-          `http://localhost:4000/api/students/subject/${subjectName}`
+          `http://localhost:4000/api/students/subject/${subjectName}`,
         );
         if (!res.ok) {
           throw res;
@@ -46,7 +46,7 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
     try {
       const res = await fetch(
         `http://localhost:4000/api/subjects/${subjectId}`,
-        { method: "DELETE" }
+        { method: "DELETE" },
       );
       if (res.ok) {
         setSnack({
@@ -94,7 +94,7 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
                 There are {studentDetails.length} students enrolled in{" "}
                 {subjectName}.
               </DialogContentText>
-              <List>
+              {/* <List>
                 {studentDetails.map((student, i) => (
                   <ListItem key={i}>
                     <ListItemText
@@ -103,7 +103,7 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
                     />
                   </ListItem>
                 ))}
-              </List>
+              </List> */}
               <DialogContentText>Delete {subjectName}?</DialogContentText>
             </>
           ) : studentDetails.length === 1 ? (

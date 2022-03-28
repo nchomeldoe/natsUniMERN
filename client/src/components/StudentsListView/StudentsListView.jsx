@@ -1,26 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Button, Container, Typography, Stack } from "@mui/material";
 import Loader from "react-loader-spinner";
 import { navigate } from "@reach/router";
 
+import { ServiceContext } from "../../context/ServiceProvider";
 import StudentCard from "../StudentCard/StudentCard";
 
 const StudentsListView = () => {
-  const [students, setStudents] = useState(null);
+  const { apiCalls, students } = useContext(ServiceContext);
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const res = await fetch("http://localhost:4000/api/students/");
-        if (!res.ok) {
-          throw res;
-        }
-        const data = await res.json();
-        setStudents(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchStudents();
+    apiCalls.fetchStudents();
   }, []);
 
   const handleClick = () => navigate(`/newStudent`);
