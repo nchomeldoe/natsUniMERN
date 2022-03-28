@@ -5,5 +5,5 @@ npm run watch in the root folder and npm start in the client folder to run local
 
 You will need to create a MongoDB database with a students collection and a subjects collection either locally or in the cloud.
 
-You will need the following config var in the index.js file:
+You will need to make a .env file with the following config var:
 DB_URI=[your MongoDB database connection]
