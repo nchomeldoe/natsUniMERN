@@ -8,13 +8,13 @@ import {
   Stack,
 } from "@mui/material";
 
-import { NotificationContext } from "../../context/NotificationProvider";
 import { ServiceContext } from "../../context/ServiceProvider";
 
+import { formatSubjectNameForDb } from "../../utility/utilityFuncs";
+
 const AddSubjectModal = () => {
-  const { setSnack } = useContext(NotificationContext);
   const {
-    apiCalls: { fetchSubjects },
+    apiCalls: { fetchSubjects, addSubject },
   } = useContext(ServiceContext);
 
   const [subjectName, setSubjectName] = useState("");
@@ -30,45 +30,14 @@ const AddSubjectModal = () => {
   const handleChange = (e) => {
     setSubjectName(e.target.value);
   };
+
   const handleAdd = async () => {
     setIsAdding(true);
-    const subjectNameWords = subjectName.split(" ");
-    const formattedSubjectNameWords = subjectNameWords.map((word) => {
-      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    });
-    const formattedSubjectName = formattedSubjectNameWords.join(" ");
-    try {
-      const res = await fetch(`http://localhost:4000/api/subjects/`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: formattedSubjectName }),
-      });
-      if (res.ok) {
-        setSnack({
-          message: `${subjectName} has been created!`,
-          severity: "success",
-          open: true,
-        });
-        handleCloseModal();
-        fetchSubjects();
-      } else {
-        const error = await res.json();
-        setSnack({
-          message: error.message,
-          severity: "error",
-          open: true,
-        });
-      }
-    } catch (err) {
-      console.error(err);
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
+    const formattedSubjectName = formatSubjectNameForDb(subjectName);
+    const subjIsAddedStatus = await addSubject(formattedSubjectName);
+    if (subjIsAddedStatus) {
+      handleCloseModal();
+      fetchSubjects();
     }
     setIsAdding(false);
   };

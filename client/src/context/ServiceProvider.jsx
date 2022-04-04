@@ -1,4 +1,6 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
+
+import { NotificationContext } from "./NotificationProvider";
 
 export const ServiceContext = createContext({});
 
@@ -10,6 +12,8 @@ const ServiceProvider = ({ children }) => {
   const [students, setStudents] = useState(null);
   const [student, setStudent] = useState(null);
   const [studentsBySubject, setStudentsBySubject] = useState([]);
+
+  const { setSnack } = useContext(NotificationContext);
 
   const fetchSubjects = async () => {
     // const [isLoading, setIsLoading] = useState(true)
@@ -66,16 +70,40 @@ const ServiceProvider = ({ children }) => {
     }
   };
 
-  // const addSubject = async () => {
-  //   await fetch(`http://localhost:4000/api/subjects/`, {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ name: formattedSubjectName }),
-  //   });
-  // };
+  const addSubject = async (subjectName) => {
+    try {
+      const res = await fetch(SUBJECTS_ENDPOINT, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: subjectName }),
+      });
+      if (res.ok) {
+        setSnack({
+          message: `${subjectName} has been created!`,
+          severity: "success",
+          open: true,
+        });
+      } else {
+        const error = await res.json();
+        setSnack({
+          message: error.message,
+          severity: "error",
+          open: true,
+        });
+      }
+      return res.ok;
+    } catch (err) {
+      console.error(err);
+      setSnack({
+        message: "Sorry, there was an error! Please try again.",
+        severity: "error",
+        open: true,
+      });
+    }
+  };
 
   // const addStudent = async () => {
   //   await fetch(`http://localhost:4000/api/students/`, {
@@ -116,7 +144,7 @@ const ServiceProvider = ({ children }) => {
     fetchStudents,
     fetchStudentById,
     fetchStudentsBySubject,
-    // addSubject,
+    addSubject,
     // addStudent,
     // updateStudent,
     // deleteSubject,
