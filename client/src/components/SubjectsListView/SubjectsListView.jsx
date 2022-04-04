@@ -7,10 +7,13 @@ import SubjectCard from "../SubjectCard/SubjectCard";
 import AddSubjectModal from "../Modals/AddSubjectModal";
 
 const SubjectsListView = () => {
-  const { apiCalls, subjects } = useContext(ServiceContext);
+  const {
+    apiCalls: { fetchSubjects },
+    subjects,
+  } = useContext(ServiceContext);
   useEffect(() => {
-    apiCalls.fetchSubjects();
-  }, [apiCalls]);
+    fetchSubjects();
+  }, [fetchSubjects]);
 
   return (
     <>

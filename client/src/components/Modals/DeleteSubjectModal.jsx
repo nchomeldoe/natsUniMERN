@@ -14,7 +14,9 @@ import { ServiceContext } from "../../context/ServiceProvider";
 
 const DeleteSubjectModal = ({ subjectName, subjectId }) => {
   const { setSnack } = useContext(NotificationContext);
-  const { apiCalls } = useContext(ServiceContext);
+  const {
+    apiCalls: { fetchSubjects },
+  } = useContext(ServiceContext);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -57,7 +59,7 @@ const DeleteSubjectModal = ({ subjectName, subjectId }) => {
           open: true,
         });
         handleCloseModal();
-        apiCalls.fetchSubjects();
+        fetchSubjects();
       } else {
         setSnack({
           message: "Sorry, there was an error! Please try again.",

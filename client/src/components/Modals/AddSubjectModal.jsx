@@ -13,7 +13,9 @@ import { ServiceContext } from "../../context/ServiceProvider";
 
 const AddSubjectModal = () => {
   const { setSnack } = useContext(NotificationContext);
-  const { apiCalls } = useContext(ServiceContext);
+  const {
+    apiCalls: { fetchSubjects },
+  } = useContext(ServiceContext);
 
   const [subjectName, setSubjectName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -51,7 +53,7 @@ const AddSubjectModal = () => {
           open: true,
         });
         handleCloseModal();
-        apiCalls.fetchSubjects();
+        fetchSubjects();
       } else {
         const error = await res.json();
         setSnack({

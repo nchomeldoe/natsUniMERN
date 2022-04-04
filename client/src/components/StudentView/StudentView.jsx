@@ -10,12 +10,16 @@ import { ServiceContext } from "../../context/ServiceProvider";
 const StudentView = () => {
   const { studentId } = useMatch("/student/:studentId");
   const { setSnack } = useContext(NotificationContext);
-  const { apiCalls, student, setStudent } = useContext(ServiceContext);
+  const {
+    apiCalls: { fetchStudentById },
+    student,
+    setStudent,
+  } = useContext(ServiceContext);
 
   useEffect(() => {
-    apiCalls.fetchStudentById(studentId);
+    fetchStudentById(studentId);
     return () => setStudent(null);
-  }, [studentId]);
+  }, [studentId, setStudent]);
 
   const handleSubmit = async (values) => {
     try {

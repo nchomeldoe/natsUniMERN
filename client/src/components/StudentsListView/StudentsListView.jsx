@@ -7,10 +7,13 @@ import { ServiceContext } from "../../context/ServiceProvider";
 import StudentCard from "../StudentCard/StudentCard";
 
 const StudentsListView = () => {
-  const { apiCalls, students } = useContext(ServiceContext);
+  const {
+    apiCalls: { fetchStudents },
+    students,
+  } = useContext(ServiceContext);
   useEffect(() => {
-    apiCalls.fetchStudents();
-  }, [apiCalls]);
+    fetchStudents();
+  }, [fetchStudents]);
 
   const handleClick = () => navigate(`/newStudent`);
 
