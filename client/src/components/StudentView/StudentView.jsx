@@ -14,8 +14,6 @@ const StudentView = () => {
 
   useEffect(() => {
     apiCalls.fetchStudentById(studentId);
-    console.log(student);
-    console.log(studentId);
     return () => setStudent(null);
   }, [studentId]);
 

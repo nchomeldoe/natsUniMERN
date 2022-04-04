@@ -17,7 +17,7 @@ const SubjectFormField = ({ name, label, helpMessage }) => {
   const { apiCalls, subjects } = useContext(ServiceContext);
   useEffect(() => {
     apiCalls.fetchSubjects();
-  }, []);
+  }, [apiCalls]);
 
   const [touched, setTouched] = useState(false);
 

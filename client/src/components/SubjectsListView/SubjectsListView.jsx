@@ -10,7 +10,7 @@ const SubjectsListView = () => {
   const { apiCalls, subjects } = useContext(ServiceContext);
   useEffect(() => {
     apiCalls.fetchSubjects();
-  }, []);
+  }, [apiCalls]);
 
   return (
     <>

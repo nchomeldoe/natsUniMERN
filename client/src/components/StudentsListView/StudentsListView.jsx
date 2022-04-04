@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { Button, Container, Typography, Stack } from "@mui/material";
 import Loader from "react-loader-spinner";
 import { navigate } from "@reach/router";
@@ -10,7 +10,7 @@ const StudentsListView = () => {
   const { apiCalls, students } = useContext(ServiceContext);
   useEffect(() => {
     apiCalls.fetchStudents();
-  }, []);
+  }, [apiCalls]);
 
   const handleClick = () => navigate(`/newStudent`);
 
