@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Box } from "@mui/material";
 
 import DeleteSubjectModal from "../Modals/DeleteSubjectModal";
 
-const SubjectCard = ({ subject, fetchSubjects }) => {
+const SubjectCard = ({ subject }) => {
   const { name, _id } = subject;
   return (
     <div>
@@ -19,11 +19,7 @@ const SubjectCard = ({ subject, fetchSubjects }) => {
             <Typography variant="h5">{name}</Typography>
           </CardContent>
 
-          <DeleteSubjectModal
-            subjectName={name}
-            subjectId={_id}
-            fetchSubjects={fetchSubjects}
-          />
+          <DeleteSubjectModal subjectName={name} subjectId={_id} />
         </Box>
       </Card>
     </div>

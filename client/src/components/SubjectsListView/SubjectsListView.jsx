@@ -1,27 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Container, Typography, Stack } from "@mui/material";
 import Loader from "react-loader-spinner";
 
+import { ServiceContext } from "../../context/ServiceProvider";
 import SubjectCard from "../SubjectCard/SubjectCard";
 import AddSubjectModal from "../Modals/AddSubjectModal";
 
 const SubjectsListView = () => {
-  const [subjects, setSubjects] = useState(null);
-  const fetchSubjects = async () => {
-    try {
-      const res = await fetch("http://localhost:4000/api/subjects/");
-      if (!res.ok) {
-        throw res;
-      }
-      const data = await res.json();
-      setSubjects(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  const { apiCalls, subjects } = useContext(ServiceContext);
   useEffect(() => {
-    fetchSubjects();
+    apiCalls.fetchSubjects();
   }, []);
 
   return (
@@ -34,16 +22,12 @@ const SubjectsListView = () => {
         >
           <Typography variant="h5">Subjects</Typography>
           <div>
-            <AddSubjectModal fetchSubjects={fetchSubjects} />
+            <AddSubjectModal />
           </div>
           <div>
             {subjects ? (
               subjects.map((subject) => (
-                <SubjectCard
-                  key={`subject-${subject._id}`}
-                  subject={subject}
-                  fetchSubjects={fetchSubjects}
-                />
+                <SubjectCard key={`subject-${subject._id}`} subject={subject} />
               ))
             ) : (
               <Loader type="Puff" color="#00BFFF" height={100} width={100} />

@@ -9,9 +9,11 @@ import {
 } from "@mui/material";
 
 import { NotificationContext } from "../../context/NotificationProvider";
+import { ServiceContext } from "../../context/ServiceProvider";
 
-const AddSubjectModal = ({ fetchSubjects }) => {
+const AddSubjectModal = () => {
   const { setSnack } = useContext(NotificationContext);
+  const { apiCalls } = useContext(ServiceContext);
 
   const [subjectName, setSubjectName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,7 +51,7 @@ const AddSubjectModal = ({ fetchSubjects }) => {
           open: true,
         });
         handleCloseModal();
-        fetchSubjects();
+        apiCalls.fetchSubjects();
       } else {
         const error = await res.json();
         setSnack({

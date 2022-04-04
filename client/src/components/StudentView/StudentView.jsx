@@ -1,32 +1,22 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { Container, Typography, Stack } from "@mui/material";
 import { useMatch } from "@reach/router";
 import Loader from "react-loader-spinner";
 
 import StudentForm from "../StudentForm/StudentForm";
 import { NotificationContext } from "../../context/NotificationProvider";
+import { ServiceContext } from "../../context/ServiceProvider";
 
 const StudentView = () => {
   const { studentId } = useMatch("/student/:studentId");
-  const [student, setStudent] = useState(null);
   const { setSnack } = useContext(NotificationContext);
+  const { apiCalls, student, setStudent } = useContext(ServiceContext);
 
   useEffect(() => {
-    const fetchStudentData = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:4000/api/students/${studentId}`
-        );
-        if (!res.ok) {
-          throw res;
-        }
-        const data = await res.json();
-        setStudent(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchStudentData();
+    apiCalls.fetchStudentById(studentId);
+    console.log(student);
+    console.log(studentId);
+    return () => setStudent(null);
   }, [studentId]);
 
   const handleSubmit = async (values) => {
@@ -40,7 +30,7 @@ const StudentView = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(values),
-        }
+        },
       );
       if (res.ok) {
         setSnack({

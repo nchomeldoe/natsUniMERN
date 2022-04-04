@@ -3,20 +3,50 @@ import React, { createContext, useState } from "react";
 export const ServiceContext = createContext({});
 
 const ServiceProvider = ({ children }) => {
-  const [students, setStudents] = useState(null);
+  const SUBJECTS_ENDPOINT = "http://localhost:4000/api/subjects/";
+  const STUDENTS_ENDPOINT = "http://localhost:4000/api/students/";
 
-  // const fetchSubjects = async () => {
-  //   await fetch("http://localhost:4000/api/subjects/");
-  // };
+  const [subjects, setSubjects] = useState(null);
+  const [students, setStudents] = useState(null);
+  const [student, setStudent] = useState(null);
+
+  const fetchSubjects = async () => {
+    // const [isLoading, setIsLoading] = useState(true)
+    try {
+      const res = await fetch(SUBJECTS_ENDPOINT);
+      if (!res.ok) {
+        throw res;
+      }
+      const data = await res.json();
+      setSubjects(data);
+    } catch (err) {
+      console.error(err);
+    }
+    // setIsLoading(false)
+    // return [isLoading]
+  };
 
   const fetchStudents = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/students/");
+      const res = await fetch(STUDENTS_ENDPOINT);
       if (!res.ok) {
         throw res;
       }
       const data = await res.json();
       setStudents(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchStudentById = async (studentId) => {
+    try {
+      const res = await fetch(`${STUDENTS_ENDPOINT}${studentId}`);
+      if (!res.ok) {
+        throw res;
+      }
+      const data = await res.json();
+      setStudent(data);
     } catch (err) {
       console.error(err);
     }
@@ -76,9 +106,9 @@ const ServiceProvider = ({ children }) => {
   // };
 
   const apiCalls = {
-    // fetchSubjects,
+    fetchSubjects,
     fetchStudents,
-    // fetchStudentByID,
+    fetchStudentById,
     // fetchStudentsBySubject,
     // addSubject,
     // addStudent,
@@ -89,7 +119,9 @@ const ServiceProvider = ({ children }) => {
 
   return (
     <>
-      <ServiceContext.Provider value={{ apiCalls, students }}>
+      <ServiceContext.Provider
+        value={{ apiCalls, subjects, students, student, setStudent }}
+      >
         {children}
       </ServiceContext.Provider>
     </>

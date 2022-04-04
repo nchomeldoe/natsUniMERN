@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Field } from "formik";
 import {
   OutlinedInput,
@@ -11,25 +11,12 @@ import {
   FormHelperText,
 } from "@mui/material";
 
+import { ServiceContext } from "../../context/ServiceProvider";
+
 const SubjectFormField = ({ name, label, helpMessage }) => {
-  const [taughtSubjects, setTaughtSubjects] = useState([]);
+  const { apiCalls, subjects } = useContext(ServiceContext);
   useEffect(() => {
-    const fetchSubjects = async () => {
-      try {
-        const res = await fetch("http://localhost:4000/api/subjects/");
-        if (!res.ok) {
-          throw res;
-        }
-        const data = await res.json();
-        const subjectNames = data.map((subject, i) => {
-          return subject.name;
-        });
-        setTaughtSubjects(subjectNames);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchSubjects();
+    apiCalls.fetchSubjects();
   }, []);
 
   const [touched, setTouched] = useState(false);
@@ -63,11 +50,12 @@ const SubjectFormField = ({ name, label, helpMessage }) => {
                 </Box>
               )}
             >
-              {taughtSubjects.map((subject) => (
-                <MenuItem key={subject} value={subject}>
-                  {subject}
-                </MenuItem>
-              ))}
+              {subjects &&
+                subjects.map((subject, i) => (
+                  <MenuItem key={`subject-${i}`} value={subject.name}>
+                    {subject.name}
+                  </MenuItem>
+                ))}
             </Select>
             {meta.error && touched ? (
               <FormHelperText>{helpMessage}</FormHelperText>

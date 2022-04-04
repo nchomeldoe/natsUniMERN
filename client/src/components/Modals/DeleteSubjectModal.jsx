@@ -10,9 +10,11 @@ import { IconButton, List, ListItem, ListItemText } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import { NotificationContext } from "../../context/NotificationProvider";
+import { ServiceContext } from "../../context/ServiceProvider";
 
-const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
+const DeleteSubjectModal = ({ subjectName, subjectId }) => {
   const { setSnack } = useContext(NotificationContext);
+  const { apiCalls } = useContext(ServiceContext);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -55,7 +57,7 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
           open: true,
         });
         handleCloseModal();
-        fetchSubjects();
+        apiCalls.fetchSubjects();
       } else {
         setSnack({
           message: "Sorry, there was an error! Please try again.",
@@ -75,10 +77,7 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
   };
   return (
     <>
-      <IconButton
-        onClick={handleShowModal}
-        //    disabled={isSubmitting}
-      >
+      <IconButton onClick={handleShowModal}>
         <DeleteForeverIcon />
       </IconButton>
       <Dialog
@@ -92,19 +91,8 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
             <>
               <DialogContentText>
                 There are {studentDetails.length} students enrolled in{" "}
-                {subjectName}.
+                {subjectName}. Delete {subjectName}?
               </DialogContentText>
-              {/* <List>
-                {studentDetails.map((student, i) => (
-                  <ListItem key={i}>
-                    <ListItemText
-                      primary={student.name}
-                      secondary={student.email}
-                    />
-                  </ListItem>
-                ))}
-              </List> */}
-              <DialogContentText>Delete {subjectName}?</DialogContentText>
             </>
           ) : studentDetails.length === 1 ? (
             <>
