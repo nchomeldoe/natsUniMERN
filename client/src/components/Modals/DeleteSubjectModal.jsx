@@ -15,29 +15,15 @@ import { ServiceContext } from "../../context/ServiceProvider";
 const DeleteSubjectModal = ({ subjectName, subjectId }) => {
   const { setSnack } = useContext(NotificationContext);
   const {
-    apiCalls: { fetchSubjects },
+    apiCalls: { fetchStudentsBySubject, fetchSubjects },
+    studentsBySubject,
   } = useContext(ServiceContext);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [studentDetails, setStudentDetails] = useState([]);
 
   useEffect(() => {
-    const fetchStudentDetails = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:4000/api/students/subject/${subjectName}`,
-        );
-        if (!res.ok) {
-          throw res;
-        }
-        const data = await res.json();
-        setStudentDetails(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchStudentDetails();
+    fetchStudentsBySubject(subjectName);
   }, [modalOpen, subjectName]);
 
   const handleShowModal = async () => {
@@ -89,21 +75,21 @@ const DeleteSubjectModal = ({ subjectName, subjectId }) => {
         }}
       >
         <DialogContent>
-          {studentDetails.length === 0 ? (
+          {studentsBySubject.length === 0 ? (
             <>
               <DialogContentText>
-                There are {studentDetails.length} students enrolled in{" "}
+                There are {studentsBySubject.length} students enrolled in{" "}
                 {subjectName}. Delete {subjectName}?
               </DialogContentText>
             </>
-          ) : studentDetails.length === 1 ? (
+          ) : studentsBySubject.length === 1 ? (
             <>
               <DialogContentText>
-                There is {studentDetails.length} student enrolled in{" "}
+                There is {studentsBySubject.length} student enrolled in{" "}
                 {subjectName}.
               </DialogContentText>
               <List>
-                {studentDetails.map((student, i) => (
+                {studentsBySubject.map((student, i) => (
                   <ListItem key={i}>
                     <ListItemText
                       primary={student.name}
@@ -119,11 +105,11 @@ const DeleteSubjectModal = ({ subjectName, subjectId }) => {
           ) : (
             <>
               <DialogContentText>
-                There are {studentDetails.length} students enrolled in{" "}
+                There are {studentsBySubject.length} students enrolled in{" "}
                 {subjectName}.
               </DialogContentText>
               <List>
-                {studentDetails.map((student, i) => (
+                {studentsBySubject.map((student, i) => (
                   <ListItem key={i}>
                     <ListItemText
                       primary={student.name}
@@ -144,7 +130,7 @@ const DeleteSubjectModal = ({ subjectName, subjectId }) => {
             color="error"
             sx={{ mr: 1 }}
             onClick={handleDelete}
-            disabled={studentDetails.length > 0 || isDeleting}
+            disabled={studentsBySubject.length > 0 || isDeleting}
           >
             Delete
           </Button>

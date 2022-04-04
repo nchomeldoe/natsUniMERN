@@ -9,6 +9,7 @@ const ServiceProvider = ({ children }) => {
   const [subjects, setSubjects] = useState(null);
   const [students, setStudents] = useState(null);
   const [student, setStudent] = useState(null);
+  const [studentsBySubject, setStudentsBySubject] = useState([]);
 
   const fetchSubjects = async () => {
     // const [isLoading, setIsLoading] = useState(true)
@@ -52,13 +53,18 @@ const ServiceProvider = ({ children }) => {
     }
   };
 
-  // const fetchStudentByID = async () => {
-  //   await fetch(`http://localhost:4000/api/students/${studentId}`);
-  // };
-
-  // const fetchStudentsBySubject = async () => {
-  //   await fetch(`http://localhost:4000/api/students/subject/${subjectName}`);
-  // };
+  const fetchStudentsBySubject = async (subjectName) => {
+    try {
+      const res = await fetch(`${STUDENTS_ENDPOINT}subject/${subjectName}`);
+      if (!res.ok) {
+        throw res;
+      }
+      const data = await res.json();
+      setStudentsBySubject(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // const addSubject = async () => {
   //   await fetch(`http://localhost:4000/api/subjects/`, {
@@ -109,7 +115,7 @@ const ServiceProvider = ({ children }) => {
     fetchSubjects,
     fetchStudents,
     fetchStudentById,
-    // fetchStudentsBySubject,
+    fetchStudentsBySubject,
     // addSubject,
     // addStudent,
     // updateStudent,
@@ -120,7 +126,14 @@ const ServiceProvider = ({ children }) => {
   return (
     <>
       <ServiceContext.Provider
-        value={{ apiCalls, subjects, students, student, setStudent }}
+        value={{
+          apiCalls,
+          subjects,
+          students,
+          student,
+          setStudent,
+          studentsBySubject,
+        }}
       >
         {children}
       </ServiceContext.Provider>
