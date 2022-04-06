@@ -2,10 +2,12 @@ import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import React, { useState, useContext } from "react";
 import { navigate } from "@reach/router";
 
-import { NotificationContext } from "../../context/NotificationProvider";
+import { ServiceContext } from "../../context/ServiceProvider";
 
 const DeleteStudentModal = ({ studentName, studentId, isSubmitting }) => {
-  const { setSnack } = useContext(NotificationContext);
+  const {
+    apiCalls: { deleteStudent },
+  } = useContext(ServiceContext);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -15,33 +17,7 @@ const DeleteStudentModal = ({ studentName, studentId, isSubmitting }) => {
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    try {
-      const res = await fetch(
-        `http://localhost:4000/api/students/${studentId}`,
-        { method: "DELETE" }
-      );
-      if (res.ok) {
-        setSnack({
-          message: `${studentName} has been deleted!`,
-          severity: "success",
-          open: true,
-        });
-        navigate(`/studentList`);
-      } else {
-        setSnack({
-          message: "Sorry, there was an error! Please try again.",
-          severity: "error",
-          open: true,
-        });
-      }
-    } catch (err) {
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
-      console.error(err);
-    }
+    deleteStudent(studentId, studentName);
     setIsDeleting(false);
   };
 

@@ -9,13 +9,11 @@ import {
 import { IconButton, List, ListItem, ListItemText } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-import { NotificationContext } from "../../context/NotificationProvider";
 import { ServiceContext } from "../../context/ServiceProvider";
 
 const DeleteSubjectModal = ({ subjectName, subjectId }) => {
-  const { setSnack } = useContext(NotificationContext);
   const {
-    apiCalls: { fetchStudentsBySubject, fetchSubjects },
+    apiCalls: { fetchStudentsBySubject, fetchSubjects, deleteSubject },
     studentsBySubject,
   } = useContext(ServiceContext);
 
@@ -33,33 +31,10 @@ const DeleteSubjectModal = ({ subjectName, subjectId }) => {
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    try {
-      const res = await fetch(
-        `http://localhost:4000/api/subjects/${subjectId}`,
-        { method: "DELETE" },
-      );
-      if (res.ok) {
-        setSnack({
-          message: `${subjectName} has been deleted!`,
-          severity: "success",
-          open: true,
-        });
-        handleCloseModal();
-        fetchSubjects();
-      } else {
-        setSnack({
-          message: "Sorry, there was an error! Please try again.",
-          severity: "error",
-          open: true,
-        });
-      }
-    } catch (err) {
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
-      console.error(err);
+    const subjIsDeletedStatus = await deleteSubject(subjectId, subjectName);
+    if (subjIsDeletedStatus) {
+      handleCloseModal();
+      fetchSubjects();
     }
     setIsDeleting(false);
   };
