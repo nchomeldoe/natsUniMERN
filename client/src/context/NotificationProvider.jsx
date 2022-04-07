@@ -14,9 +14,30 @@ const NotificationProvider = ({ children }) => {
   const handleClose = () => {
     setSnack({ ...snack, open: false });
   };
+
+  const openSuccessSnack = (successMessage) => {
+    setSnack({
+      message: successMessage,
+      severity: "success",
+      open: true,
+    });
+  };
+
+  const openErrorSnack = (
+    errorMessage = "Sorry, there was an error! Please try again.",
+  ) => {
+    setSnack({
+      message: errorMessage,
+      severity: "error",
+      open: true,
+    });
+  };
+
   return (
     <>
-      <NotificationContext.Provider value={{ snack, setSnack }}>
+      <NotificationContext.Provider
+        value={{ openSuccessSnack, openErrorSnack }}
+      >
         {children}
         <Snackbar
           open={snack.open}

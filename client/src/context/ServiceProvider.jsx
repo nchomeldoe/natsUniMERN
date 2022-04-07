@@ -10,27 +10,27 @@ const ServiceProvider = ({ children }) => {
   const SUBJECTS_ENDPOINT = "http://localhost:4000/api/subjects/";
   const STUDENTS_ENDPOINT = "http://localhost:4000/api/students/";
 
-  const [subjects, setSubjects] = useState(null);
-  const [students, setStudents] = useState(null);
+  const [subjects, setSubjects] = useState([]);
+  const [students, setStudents] = useState([]);
   const [student, setStudent] = useState(null);
   const [studentsBySubject, setStudentsBySubject] = useState([]);
 
-  const { setSnack } = useContext(NotificationContext);
+  const { openSuccessSnack, openErrorSnack } = useContext(NotificationContext);
 
   const fetchSubjects = async () => {
-    // const [isLoading, setIsLoading] = useState(true)
     try {
       const res = await fetch(SUBJECTS_ENDPOINT);
       if (!res.ok) {
         throw res;
+        // return {error:true}
       }
       const data = await res.json();
       setSubjects(data);
     } catch (err) {
+      // return {error:true}
       console.error(err);
+      throw err;
     }
-    // setIsLoading(false)
-    // return [isLoading]
   };
 
   const fetchStudents = async () => {
@@ -83,27 +83,15 @@ const ServiceProvider = ({ children }) => {
         body: JSON.stringify({ name: subjectName }),
       });
       if (res.ok) {
-        setSnack({
-          message: `${subjectName} has been created!`,
-          severity: "success",
-          open: true,
-        });
+        openSuccessSnack(`${subjectName} has been created!`);
       } else {
         const error = await res.json();
-        setSnack({
-          message: error.message,
-          severity: "error",
-          open: true,
-        });
+        openErrorSnack(error.message);
       }
       return res.ok;
     } catch (err) {
       console.error(err);
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
+      openErrorSnack();
     }
   };
 
@@ -120,27 +108,17 @@ const ServiceProvider = ({ children }) => {
       if (res.ok) {
         const data = await res.json();
         const studentId = data._id;
-        setSnack({
-          message: `${studentData.firstName} ${studentData.lastName} has been created!`,
-          severity: "success",
-          open: true,
-        });
+        openSuccessSnack(
+          `${studentData.firstName} ${studentData.lastName} has been created!`,
+        );
         navigate(`/student/${studentId}`);
       } else {
         const error = await res.json();
-        setSnack({
-          message: error.message,
-          severity: "error",
-          open: true,
-        });
+        openErrorSnack(error.message);
       }
     } catch (err) {
       console.error(err);
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
+      openErrorSnack();
     }
   };
 
@@ -155,26 +133,16 @@ const ServiceProvider = ({ children }) => {
         body: JSON.stringify(studentData),
       });
       if (res.ok) {
-        setSnack({
-          message: `${studentData.firstName} ${studentData.lastName} has been updated!`,
-          severity: "success",
-          open: true,
-        });
-        window.location.reload();
+        openSuccessSnack(
+          `${studentData.firstName} ${studentData.lastName} has been updated!`,
+        );
+        navigate(`/student/${studentId}`);
       } else {
         const error = await res.json();
-        setSnack({
-          message: error.message,
-          severity: "error",
-          open: true,
-        });
+        openErrorSnack(error.message);
       }
     } catch (err) {
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
+      openErrorSnack();
       console.error(err);
     }
   };
@@ -185,25 +153,13 @@ const ServiceProvider = ({ children }) => {
         method: "DELETE",
       });
       if (res.ok) {
-        setSnack({
-          message: `${subjectName} has been deleted!`,
-          severity: "success",
-          open: true,
-        });
+        openSuccessSnack(`${subjectName} has been deleted!`);
       } else {
-        setSnack({
-          message: "Sorry, there was an error! Please try again.",
-          severity: "error",
-          open: true,
-        });
+        openErrorSnack();
       }
       return res.ok;
     } catch (err) {
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
+      openErrorSnack();
       console.error(err);
     }
   };
@@ -214,25 +170,13 @@ const ServiceProvider = ({ children }) => {
         method: "DELETE",
       });
       if (res.ok) {
-        setSnack({
-          message: `${studentName} has been deleted!`,
-          severity: "success",
-          open: true,
-        });
+        openSuccessSnack(`${studentName} has been deleted!`);
         navigate(`/studentList`);
       } else {
-        setSnack({
-          message: "Sorry, there was an error! Please try again.",
-          severity: "error",
-          open: true,
-        });
+        openErrorSnack();
       }
     } catch (err) {
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
+      openErrorSnack();
       console.error(err);
     }
   };

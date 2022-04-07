@@ -1,6 +1,5 @@
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import React, { useState, useContext } from "react";
-import { navigate } from "@reach/router";
 
 import { ServiceContext } from "../../context/ServiceProvider";
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { Container, Typography, Stack } from "@mui/material";
 import Loader from "react-loader-spinner";
 
@@ -11,8 +11,18 @@ const SubjectsListView = () => {
     apiCalls: { fetchSubjects },
     subjects,
   } = useContext(ServiceContext);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
   useEffect(() => {
-    fetchSubjects();
+    setIsLoading(true);
+    try {
+      fetchSubjects();
+    } catch (err) {
+      setIsError(true);
+    }
+    setIsLoading(false);
   }, [fetchSubjects]);
 
   return (
@@ -28,12 +38,12 @@ const SubjectsListView = () => {
             <AddSubjectModal />
           </div>
           <div>
-            {subjects ? (
+            {isLoading ? (
+              <Loader type="Puff" color="#00BFFF" height={100} width={100} />
+            ) : (
               subjects.map((subject) => (
                 <SubjectCard key={`subject-${subject._id}`} subject={subject} />
               ))
-            ) : (
-              <Loader type="Puff" color="#00BFFF" height={100} width={100} />
             )}
           </div>
         </Stack>
