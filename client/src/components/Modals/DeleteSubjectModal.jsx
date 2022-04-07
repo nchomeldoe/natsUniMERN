@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { IconButton, List, ListItem, ListItemText } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import Loader from "react-loader-spinner";
 
 import { ServiceContext } from "../../context/ServiceProvider";
 
@@ -15,13 +16,19 @@ const DeleteSubjectModal = ({ subjectName, subjectId }) => {
   const {
     apiCalls: { fetchStudentsBySubject, fetchSubjects, deleteSubject },
     studentsBySubject,
+    error,
+    setError,
   } = useContext(ServiceContext);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     fetchStudentsBySubject(subjectName);
+    setIsLoading(false);
+    return () => setError({});
   }, [modalOpen, subjectName]);
 
   const handleShowModal = async () => {
@@ -50,7 +57,24 @@ const DeleteSubjectModal = ({ subjectName, subjectId }) => {
         }}
       >
         <DialogContent>
-          {studentsBySubject.length === 0 ? (
+          {error.fetchStudentsBySubjectError ? (
+            <>
+              <DialogContentText>
+                Sorry, something has gone wrong...
+              </DialogContentText>
+            </>
+          ) : isLoading ? (
+            <>
+              <DialogContentText
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Loader type="Puff" color="#00BFFF" height={50} width={50} />
+              </DialogContentText>
+            </>
+          ) : studentsBySubject.length === 0 ? (
             <>
               <DialogContentText>
                 There are {studentsBySubject.length} students enrolled in{" "}
@@ -105,7 +129,12 @@ const DeleteSubjectModal = ({ subjectName, subjectId }) => {
             color="error"
             sx={{ mr: 1 }}
             onClick={handleDelete}
-            disabled={studentsBySubject.length > 0 || isDeleting}
+            disabled={
+              studentsBySubject.length > 0 ||
+              isDeleting ||
+              error.fetchStudentsBySubjectError ||
+              isLoading
+            }
           >
             Delete
           </Button>

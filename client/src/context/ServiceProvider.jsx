@@ -14,28 +14,29 @@ const ServiceProvider = ({ children }) => {
   const [students, setStudents] = useState([]);
   const [student, setStudent] = useState(null);
   const [studentsBySubject, setStudentsBySubject] = useState([]);
+  const [error, setError] = useState({});
 
   const { openSuccessSnack, openErrorSnack } = useContext(NotificationContext);
 
   const fetchSubjects = async () => {
     try {
       const res = await fetch(SUBJECTS_ENDPOINT);
+      // const res = await fetch(`${SUBJECTS_ENDPOINT}a`);
       if (!res.ok) {
         throw res;
-        // return {error:true}
       }
       const data = await res.json();
       setSubjects(data);
     } catch (err) {
-      // return {error:true}
       console.error(err);
-      throw err;
+      setError({ fetchSubjectsError: true });
     }
   };
 
   const fetchStudents = async () => {
     try {
       const res = await fetch(STUDENTS_ENDPOINT);
+      // const res = await fetch(`${SUBJECTS_ENDPOINT}a`);
       if (!res.ok) {
         throw res;
       }
@@ -43,12 +44,14 @@ const ServiceProvider = ({ children }) => {
       setStudents(data);
     } catch (err) {
       console.error(err);
+      setError({ fetchStudentsError: true });
     }
   };
 
   const fetchStudentById = async (studentId) => {
     try {
       const res = await fetch(`${STUDENTS_ENDPOINT}${studentId}`);
+      // const res = await fetch(`${STUDENTS_ENDPOINT}${studentId}1`);
       if (!res.ok) {
         throw res;
       }
@@ -56,12 +59,14 @@ const ServiceProvider = ({ children }) => {
       setStudent(data);
     } catch (err) {
       console.error(err);
+      setError({ fetchStudentByIdError: true });
     }
   };
 
   const fetchStudentsBySubject = async (subjectName) => {
     try {
       const res = await fetch(`${STUDENTS_ENDPOINT}subject/${subjectName}`);
+      // const res = await fetch(`${STUDENTS_ENDPOINT}subject/`);
       if (!res.ok) {
         throw res;
       }
@@ -69,6 +74,7 @@ const ServiceProvider = ({ children }) => {
       setStudentsBySubject(data);
     } catch (err) {
       console.error(err);
+      setError({ fetchStudentsBySubjectError: true });
     }
   };
 
@@ -203,6 +209,8 @@ const ServiceProvider = ({ children }) => {
           student,
           setStudent,
           studentsBySubject,
+          error,
+          setError,
         }}
       >
         {children}
