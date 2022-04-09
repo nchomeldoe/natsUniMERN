@@ -8,32 +8,27 @@ import {
 } from "@mui/material";
 import { IconButton, List, ListItem, ListItemText } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import Loader from "react-loader-spinner";
 
-import { NotificationContext } from "../../context/NotificationProvider";
+import { ServiceContext } from "../../context/ServiceProvider";
 
-const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
-  const { setSnack } = useContext(NotificationContext);
+const DeleteSubjectModal = ({ subjectName, subjectId }) => {
+  const {
+    apiCalls: { fetchStudentsBySubject, fetchSubjects, deleteSubject },
+    studentsBySubject,
+    error,
+    setError,
+  } = useContext(ServiceContext);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [studentDetails, setStudentDetails] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchStudentDetails = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:4000/api/students/subject/${subjectName}`
-        );
-        if (!res.ok) {
-          throw res;
-        }
-        const data = await res.json();
-        setStudentDetails(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchStudentDetails();
+    setIsLoading(true);
+    fetchStudentsBySubject(subjectName);
+    setIsLoading(false);
+    return () => setError({});
   }, [modalOpen, subjectName]);
 
   const handleShowModal = async () => {
@@ -43,42 +38,16 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    try {
-      const res = await fetch(
-        `http://localhost:4000/api/subjects/${subjectId}`,
-        { method: "DELETE" }
-      );
-      if (res.ok) {
-        setSnack({
-          message: `${subjectName} has been deleted!`,
-          severity: "success",
-          open: true,
-        });
-        handleCloseModal();
-        fetchSubjects();
-      } else {
-        setSnack({
-          message: "Sorry, there was an error! Please try again.",
-          severity: "error",
-          open: true,
-        });
-      }
-    } catch (err) {
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
-      console.error(err);
+    const subjIsDeletedStatus = await deleteSubject(subjectId, subjectName);
+    if (subjIsDeletedStatus) {
+      handleCloseModal();
+      fetchSubjects();
     }
     setIsDeleting(false);
   };
   return (
     <>
-      <IconButton
-        onClick={handleShowModal}
-        //    disabled={isSubmitting}
-      >
+      <IconButton onClick={handleShowModal}>
         <DeleteForeverIcon />
       </IconButton>
       <Dialog
@@ -88,32 +57,38 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
         }}
       >
         <DialogContent>
-          {studentDetails.length === 0 ? (
+          {error.fetchStudentsBySubjectError ? (
             <>
               <DialogContentText>
-                There are {studentDetails.length} students enrolled in{" "}
-                {subjectName}.
+                Sorry, something has gone wrong...
               </DialogContentText>
-              <List>
-                {studentDetails.map((student, i) => (
-                  <ListItem key={i}>
-                    <ListItemText
-                      primary={student.name}
-                      secondary={student.email}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-              <DialogContentText>Delete {subjectName}?</DialogContentText>
             </>
-          ) : studentDetails.length === 1 ? (
+          ) : isLoading ? (
+            <>
+              <DialogContentText
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Loader type="Puff" color="#00BFFF" height={50} width={50} />
+              </DialogContentText>
+            </>
+          ) : studentsBySubject.length === 0 ? (
             <>
               <DialogContentText>
-                There is {studentDetails.length} student enrolled in{" "}
+                There are {studentsBySubject.length} students enrolled in{" "}
+                {subjectName}. Delete {subjectName}?
+              </DialogContentText>
+            </>
+          ) : studentsBySubject.length === 1 ? (
+            <>
+              <DialogContentText>
+                There is {studentsBySubject.length} student enrolled in{" "}
                 {subjectName}.
               </DialogContentText>
               <List>
-                {studentDetails.map((student, i) => (
+                {studentsBySubject.map((student, i) => (
                   <ListItem key={i}>
                     <ListItemText
                       primary={student.name}
@@ -129,11 +104,11 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
           ) : (
             <>
               <DialogContentText>
-                There are {studentDetails.length} students enrolled in{" "}
+                There are {studentsBySubject.length} students enrolled in{" "}
                 {subjectName}.
               </DialogContentText>
               <List>
-                {studentDetails.map((student, i) => (
+                {studentsBySubject.map((student, i) => (
                   <ListItem key={i}>
                     <ListItemText
                       primary={student.name}
@@ -154,7 +129,12 @@ const DeleteSubjectModal = ({ subjectName, subjectId, fetchSubjects }) => {
             color="error"
             sx={{ mr: 1 }}
             onClick={handleDelete}
-            disabled={studentDetails.length > 0 || isDeleting}
+            disabled={
+              studentsBySubject.length > 0 ||
+              isDeleting ||
+              error.fetchStudentsBySubjectError ||
+              isLoading
+            }
           >
             Delete
           </Button>

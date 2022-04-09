@@ -1,75 +1,59 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { Container, Typography, Stack } from "@mui/material";
 import { useMatch } from "@reach/router";
 import Loader from "react-loader-spinner";
 
 import StudentForm from "../StudentForm/StudentForm";
-import { NotificationContext } from "../../context/NotificationProvider";
+import ErrorPage from "../ErrorPage/ErrorPage";
+
+import { ServiceContext } from "../../context/ServiceProvider";
 
 const StudentView = () => {
   const { studentId } = useMatch("/student/:studentId");
-  const [student, setStudent] = useState(null);
-  const { setSnack } = useContext(NotificationContext);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    apiCalls: { fetchStudentById, updateStudent },
+    student,
+    setStudent,
+    error,
+    setError,
+  } = useContext(ServiceContext);
 
   useEffect(() => {
-    const fetchStudentData = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:4000/api/students/${studentId}`
-        );
-        if (!res.ok) {
-          throw res;
-        }
-        const data = await res.json();
-        setStudent(data);
-      } catch (err) {
-        console.error(err);
-      }
+    setIsLoading(true);
+    fetchStudentById(studentId);
+    setIsLoading(false);
+    return () => {
+      setStudent(null);
+      setError({});
     };
-    fetchStudentData();
-  }, [studentId]);
+  }, [studentId, setStudent]);
 
   const handleSubmit = async (values) => {
-    try {
-      const res = await fetch(
-        `http://localhost:4000/api/students/${studentId}`,
-        {
-          method: "PATCH",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        }
-      );
-      if (res.ok) {
-        setSnack({
-          message: `${values.firstName} ${values.lastName} has been updated!`,
-          severity: "success",
-          open: true,
-        });
-        window.location.reload();
-      } else {
-        const error = await res.json();
-        setSnack({
-          message: error.message,
-          severity: "error",
-          open: true,
-        });
-      }
-    } catch (err) {
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
-      console.error(err);
-    }
+    updateStudent(studentId, values);
   };
 
   return (
     <>
-      {student ? (
+      {error.fetchStudentByIdError ? (
+        <ErrorPage />
+      ) : isLoading ? (
+        <Container maxWidth="md">
+          <Stack
+            sx={{ position: "relative", top: "100px", alignItems: "center" }}
+          >
+            <Loader
+              type="Puff"
+              color="#00BFFF"
+              height={100}
+              width={100}
+              alignItems="center"
+            />
+          </Stack>
+        </Container>
+      ) : student ? (
         <Container maxWidth="md">
           <Stack
             direction="column"
@@ -85,21 +69,7 @@ const StudentView = () => {
             studentId={studentId}
           />
         </Container>
-      ) : (
-        <Container maxWidth="md">
-          <Stack
-            sx={{ position: "relative", top: "100px", alignItems: "center" }}
-          >
-            <Loader
-              type="Puff"
-              color="#00BFFF"
-              height={100}
-              width={100}
-              alignItems="center"
-            />
-          </Stack>
-        </Container>
-      )}
+      ) : null}
     </>
   );
 };

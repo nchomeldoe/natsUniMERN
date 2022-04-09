@@ -8,19 +8,22 @@ import StudentView from "./components/StudentView/StudentView";
 import NewStudent from "./components/NewStudent/NewStudent";
 import NotificationProvider from "./context/NotificationProvider";
 import SubjectsListView from "./components/SubjectsListView/SubjectsListView";
+import ServiceProvider from "./context/ServiceProvider";
 
 const App = () => {
   return (
     <>
       <NotificationProvider>
-        <NavBar />
-        <Router>
-          <HomePage path="/" />
-          <StudentsListView path="/studentList" />
-          <SubjectsListView path="/subjectList" />
-          <StudentView path="/student/:studentId" />
-          <NewStudent path="/newStudent" />
-        </Router>
+        <ServiceProvider>
+          <NavBar />
+          <Router>
+            <HomePage path="/" />
+            <StudentsListView path="/studentList" />
+            <SubjectsListView path="/subjectList" />
+            <StudentView path="/student/:studentId" />
+            <NewStudent path="/newStudent" />
+          </Router>
+        </ServiceProvider>
       </NotificationProvider>
     </>
   );

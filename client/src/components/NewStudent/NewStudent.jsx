@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
 import { Container, Typography, Stack } from "@mui/material";
-import { navigate } from "@reach/router";
 
 import StudentForm from "../StudentForm/StudentForm";
-import { NotificationContext } from "../../context/NotificationProvider";
+import { ServiceContext } from "../../context/ServiceProvider";
 
 const NewStudent = () => {
-  const { setSnack } = useContext(NotificationContext);
+  const {
+    apiCalls: { addStudent },
+  } = useContext(ServiceContext);
 
   const initialValues = {
     firstName: "",
@@ -17,40 +18,7 @@ const NewStudent = () => {
   };
 
   const handleSubmit = async (values) => {
-    try {
-      const res = await fetch(`http://localhost:4000/api/students/`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const studentId = data._id;
-        setSnack({
-          message: `${values.firstName} ${values.lastName} has been created!`,
-          severity: "success",
-          open: true,
-        });
-        navigate(`/student/${studentId}`);
-      } else {
-        const error = await res.json();
-        setSnack({
-          message: error.message,
-          severity: "error",
-          open: true,
-        });
-      }
-    } catch (err) {
-      console.error(err);
-      setSnack({
-        message: "Sorry, there was an error! Please try again.",
-        severity: "error",
-        open: true,
-      });
-    }
+    addStudent(values);
   };
 
   return (
