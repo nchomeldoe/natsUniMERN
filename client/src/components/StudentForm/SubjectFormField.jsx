@@ -20,7 +20,7 @@ const SubjectFormField = ({ name, label, helpMessage }) => {
   } = useContext(ServiceContext);
   useEffect(() => {
     fetchSubjects();
-  }, [fetchSubjects]);
+  }, []);
 
   const [touched, setTouched] = useState(false);
 

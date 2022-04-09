@@ -21,7 +21,6 @@ const ServiceProvider = ({ children }) => {
   const fetchSubjects = async () => {
     try {
       const res = await fetch(SUBJECTS_ENDPOINT);
-      // const res = await fetch(`${SUBJECTS_ENDPOINT}a`);
       if (!res.ok) {
         throw res;
       }
@@ -36,7 +35,6 @@ const ServiceProvider = ({ children }) => {
   const fetchStudents = async () => {
     try {
       const res = await fetch(STUDENTS_ENDPOINT);
-      // const res = await fetch(`${SUBJECTS_ENDPOINT}a`);
       if (!res.ok) {
         throw res;
       }
@@ -51,7 +49,6 @@ const ServiceProvider = ({ children }) => {
   const fetchStudentById = async (studentId) => {
     try {
       const res = await fetch(`${STUDENTS_ENDPOINT}${studentId}`);
-      // const res = await fetch(`${STUDENTS_ENDPOINT}${studentId}1`);
       if (!res.ok) {
         throw res;
       }
@@ -66,7 +63,6 @@ const ServiceProvider = ({ children }) => {
   const fetchStudentsBySubject = async (subjectName) => {
     try {
       const res = await fetch(`${STUDENTS_ENDPOINT}subject/${subjectName}`);
-      // const res = await fetch(`${STUDENTS_ENDPOINT}subject/`);
       if (!res.ok) {
         throw res;
       }
@@ -142,7 +138,7 @@ const ServiceProvider = ({ children }) => {
         openSuccessSnack(
           `${studentData.firstName} ${studentData.lastName} has been updated!`,
         );
-        navigate(`/student/${studentId}`);
+        navigate(`/studentList`);
       } else {
         const error = await res.json();
         openErrorSnack(error.message);
