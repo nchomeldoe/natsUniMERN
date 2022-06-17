@@ -15,10 +15,16 @@ import NotificationProvider from "./context/NotificationProvider";
 import SubjectsListView from "./components/SubjectsListView/SubjectsListView";
 import ServiceProvider from "./context/ServiceProvider";
 
+const {
+  REACT_APP_REGION,
+  REACT_APP_USER_POOL_ID,
+  REACT_APP_USER_POOL_WEB_CLIENT_ID,
+} = process.env;
+
 Amplify.configure({
-  region: "eu-west-2",
-  userPoolId: "eu-west-2_tTOU6Scc7",
-  userPoolWebClientId: "52s6fjmrntvjnf16013bkei8pa",
+  region: REACT_APP_REGION,
+  userPoolId: REACT_APP_USER_POOL_ID,
+  userPoolWebClientId: REACT_APP_USER_POOL_WEB_CLIENT_ID,
 });
 
 const App = () => {
