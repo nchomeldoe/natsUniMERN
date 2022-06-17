@@ -2,8 +2,12 @@ import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { navigate } from "@reach/router";
 
-const NavBar = ({ signOut, user }) => {
-  const { username } = user;
+const NavBar = ({ signOut }) => {
+  const handleSignOut = () => {
+    navigate(`/`);
+    signOut();
+  };
+
   return (
     <AppBar sx={{ backgroundColor: "black" }}>
       <Toolbar
@@ -11,20 +15,20 @@ const NavBar = ({ signOut, user }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          height: "100px",
         }}
       >
         <div style={{ cursor: "pointer" }}>
           <Typography variant="h4" onClick={() => navigate(`/`)}>
             Nat's University
           </Typography>
-          <Typography>{username}</Typography>
         </div>
         <div>
           <Button
             variant="outlined"
             color="error"
             sx={{ color: "white", mr: 1 }}
-            onClick={signOut}
+            onClick={handleSignOut}
           >
             Sign out
           </Button>

@@ -2,7 +2,8 @@ import React from "react";
 import { Button, Container, Typography, Stack } from "@mui/material";
 import { navigate } from "@reach/router";
 
-const HomePage = () => {
+const HomePage = ({ user }) => {
+  const { username } = user;
   return (
     <>
       <Container maxWidth="md">
@@ -11,7 +12,7 @@ const HomePage = () => {
           spacing={2}
           sx={{ position: "relative", top: "100px", alignItems: "center" }}
         >
-          <Typography variant="h4">Welcome to Nat's University</Typography>
+          <Typography variant="h4">Welcome {username}</Typography>
           <div>
             <Button
               onClick={() => {
