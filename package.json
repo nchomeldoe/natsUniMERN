@@ -6,6 +6,7 @@
   "scripts": {
     "watch": "nodemon index.js",
     "start": "node index.js",
+    "server": "nodemon index.js --ignore client",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
   "keywords": [],
