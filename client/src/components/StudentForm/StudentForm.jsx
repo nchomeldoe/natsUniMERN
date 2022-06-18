@@ -59,7 +59,7 @@ const StudentForm = ({
                 <FormField
                   name="age"
                   label="Age"
-                  helpMessage="Please enter age as a number"
+                  helpMessage="Please enter age as a number up to 100"
                 />
               </div>
               <div>

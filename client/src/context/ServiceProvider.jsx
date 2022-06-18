@@ -7,10 +7,8 @@ import { navigate } from "@reach/router";
 export const ServiceContext = createContext({});
 
 const ServiceProvider = ({ children }) => {
-  // const SUBJECTS_ENDPOINT = "http://localhost:4000/api/subjects/";
-  // const STUDENTS_ENDPOINT = "http://localhost:4000/api/students/";
-  const SUBJECTS_ENDPOINT = "api/subjects/";
-  const STUDENTS_ENDPOINT = "api/students/";
+  const SUBJECTS_ENDPOINT = "/api/subjects/";
+  const STUDENTS_ENDPOINT = "/api/students/";
 
   const [subjects, setSubjects] = useState([]);
   const [students, setStudents] = useState([]);
