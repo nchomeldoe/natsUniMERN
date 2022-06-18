@@ -25,6 +25,9 @@ const DeleteSubjectModal = ({ subjectName, subjectId }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (!modalOpen) {
+      return;
+    }
     setIsLoading(true);
     fetchStudentsBySubject(subjectName);
     setIsLoading(false);

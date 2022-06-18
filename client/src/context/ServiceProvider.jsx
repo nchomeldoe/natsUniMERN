@@ -1,8 +1,9 @@
 import React, { createContext, useState, useContext } from "react";
 
-import { NotificationContext } from "./NotificationProvider";
-
 import { navigate } from "@reach/router";
+
+import { NotificationContext } from "./NotificationProvider";
+import { formatNamesForDb } from "../utility/utilityFuncs";
 
 export const ServiceContext = createContext({});
 
@@ -98,6 +99,7 @@ const ServiceProvider = ({ children }) => {
   };
 
   const addStudent = async (studentData) => {
+    console.log(studentData);
     try {
       const res = await fetch(STUDENTS_ENDPOINT, {
         method: "POST",
@@ -125,6 +127,11 @@ const ServiceProvider = ({ children }) => {
   };
 
   const updateStudent = async (studentId, studentData) => {
+    const parsedStudentData = {
+      ...studentData,
+      firstName: formatNamesForDb(studentData.firstName),
+      lastName: formatNamesForDb(studentData.lastName),
+    };
     try {
       const res = await fetch(`${STUDENTS_ENDPOINT}${studentId}`, {
         method: "PATCH",
@@ -132,11 +139,11 @@ const ServiceProvider = ({ children }) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(studentData),
+        body: JSON.stringify(parsedStudentData),
       });
       if (res.ok) {
         openSuccessSnack(
-          `${studentData.firstName} ${studentData.lastName} has been updated!`,
+          `${parsedStudentData.firstName} ${parsedStudentData.lastName} has been updated!`,
         );
         navigate(`/studentList`);
       } else {

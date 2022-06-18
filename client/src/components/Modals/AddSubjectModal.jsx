@@ -10,7 +10,7 @@ import {
 
 import { ServiceContext } from "../../context/ServiceProvider";
 
-import { formatSubjectNameForDb } from "../../utility/utilityFuncs";
+import { formatNamesForDb } from "../../utility/utilityFuncs";
 
 const AddSubjectModal = () => {
   const {
@@ -33,7 +33,7 @@ const AddSubjectModal = () => {
 
   const handleAdd = async () => {
     setIsAdding(true);
-    const formattedSubjectName = formatSubjectNameForDb(subjectName);
+    const formattedSubjectName = formatNamesForDb(subjectName);
     const subjIsAddedStatus = await addSubject(formattedSubjectName);
     if (subjIsAddedStatus) {
       handleCloseModal();
