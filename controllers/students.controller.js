@@ -4,12 +4,15 @@ const findAll = (req, res) => {
   Student.find()
     .then((results) => {
       const sortedResults = results.sort((a, b) =>
-        `${a.lastName} ${a.firstName}` > `${b.lastName} ${b.firstName}` ? 1 : -1
+        `${a.lastName.toLowerCase()} ${a.firstName.toLowerCase()}` >
+        `${b.lastName.toLowerCase()} ${b.firstName.toLowerCase()}`
+          ? 1
+          : -1,
       );
       const abridgedResults = sortedResults.map(
         ({ email, id, firstName, lastName }) => {
           return { email, id, name: `${firstName} ${lastName}` };
-        }
+        },
       );
       res.status(200).send(abridgedResults);
     })
