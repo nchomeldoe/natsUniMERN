@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const cors = require("cors");
 
 const studentsRouter = require("./routes/students.js");
 const subjectsRouter = require("./routes/subjects.js");
@@ -27,17 +28,16 @@ const { DB_URI } = process.env;
 mongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(express.json());
-app.use((req, res, next) => {
-  // res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
-  // res.header(
-  //   "Access-Control-Allow-Headers",
-  //   "Origin, Accept, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
-  // );
-  res.header("Access-Control-Allow-Headers", "*");
-  next();
-});
+app.use(cors());
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+//   res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, Accept, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+//   );
+//   next();
+// });
 
 app.use("/api/students", studentsRouter);
 app.use("/api/subjects", subjectsRouter);
