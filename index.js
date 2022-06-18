@@ -31,10 +31,11 @@ app.use((req, res, next) => {
   // res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, Accept, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
-  );
+  // res.header(
+  //   "Access-Control-Allow-Headers",
+  //   "Origin, Accept, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+  // );
+  res.header("Access-Control-Allow-Headers", "*");
   next();
 });
 
