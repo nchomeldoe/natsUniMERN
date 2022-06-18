@@ -28,6 +28,7 @@ Amplify.configure({
 });
 
 const App = () => {
+  console.log("env", process.env);
   return (
     <Box sx={{ pt: 5 }}>
       <Authenticator hideSignUp={true}>
