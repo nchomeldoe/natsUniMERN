@@ -28,7 +28,8 @@ mongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(express.json());
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
   res.header(
     "Access-Control-Allow-Headers",
