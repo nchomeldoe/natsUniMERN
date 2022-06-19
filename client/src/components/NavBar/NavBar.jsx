@@ -15,7 +15,7 @@ const NavBar = ({ signOut }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          height: "100px",
+          height: "80px",
         }}
       >
         <div style={{ cursor: "pointer" }}>
