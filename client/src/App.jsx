@@ -59,7 +59,7 @@ const Header = () => (
       color: "white",
     }}
   >
-    <Typography align="center" sx={{ fontSize: 10 }}>
+    <Typography align="center" sx={{ fontSize: 40 }}>
       Nat's University
     </Typography>
   </Box>
