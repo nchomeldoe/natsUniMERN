@@ -4,8 +4,7 @@ const findAll = (req, res) => {
   Student.find()
     .then((results) => {
       const sortedResults = results.sort((a, b) =>
-        `${a.lastName.toLowerCase()} ${a.firstName.toLowerCase()}` >
-        `${b.lastName.toLowerCase()} ${b.firstName.toLowerCase()}`
+        `${a.lastName} ${a.firstName}` > `${b.lastName} ${b.firstName}`
           ? 1
           : -1,
       );

@@ -6,4 +6,21 @@ export const formatNamesForDb = (name) => {
   return formattedNameWords.join(" ");
 };
 
-// wirte a func to produce paarsed student data
+const formatNamesWithHyphens = (name) => {
+  const nameChars = name.split("");
+  for (let i = 0; i < nameChars.length; i++) {
+    if (nameChars[i] === "-") {
+      nameChars[i + 1] = nameChars[i + 1].toUpperCase();
+    }
+  }
+  return nameChars.join("");
+};
+
+export const parseStudentData = (studentData) => {
+  const parsedStudentData = {
+    ...studentData,
+    firstName: formatNamesWithHyphens(formatNamesForDb(studentData.firstName)),
+    lastName: formatNamesWithHyphens(formatNamesForDb(studentData.lastName)),
+  };
+  return parsedStudentData;
+};

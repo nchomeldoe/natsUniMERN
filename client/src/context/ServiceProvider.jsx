@@ -3,7 +3,7 @@ import React, { createContext, useState, useContext } from "react";
 import { navigate } from "@reach/router";
 
 import { NotificationContext } from "./NotificationProvider";
-import { formatNamesForDb } from "../utility/utilityFuncs";
+import { parseStudentData } from "../utility/utilityFuncs";
 
 export const ServiceContext = createContext({});
 
@@ -99,7 +99,7 @@ const ServiceProvider = ({ children }) => {
   };
 
   const addStudent = async (studentData) => {
-    console.log(studentData);
+    const parsedStudentData = parseStudentData(studentData);
     try {
       const res = await fetch(STUDENTS_ENDPOINT, {
         method: "POST",
@@ -107,13 +107,13 @@ const ServiceProvider = ({ children }) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(studentData),
+        body: JSON.stringify(parsedStudentData),
       });
       if (res.ok) {
         const data = await res.json();
         const studentId = data._id;
         openSuccessSnack(
-          `${studentData.firstName} ${studentData.lastName} has been created!`,
+          `${parsedStudentData.firstName} ${parsedStudentData.lastName} has been created!`,
         );
         navigate(`/student/${studentId}`);
       } else {
@@ -127,11 +127,7 @@ const ServiceProvider = ({ children }) => {
   };
 
   const updateStudent = async (studentId, studentData) => {
-    const parsedStudentData = {
-      ...studentData,
-      firstName: formatNamesForDb(studentData.firstName),
-      lastName: formatNamesForDb(studentData.lastName),
-    };
+    const parsedStudentData = parseStudentData(studentData);
     try {
       const res = await fetch(`${STUDENTS_ENDPOINT}${studentId}`, {
         method: "PATCH",
