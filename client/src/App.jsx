@@ -62,19 +62,9 @@ const Header = () => (
     <Typography align="center" sx={{ fontSize: 40 }}>
       Nat's University
     </Typography>
+
+    <Typography align="center" sx={{ fontSize: 12, pb: 2 }}>
+      Please email nchomeldoe@gmail.com for the username and password.
+    </Typography>
   </Box>
 );
-
-// const Footer = () => (
-//   <Box
-//     sx={{
-//       mt: 10,
-//       backgroundColor: "white",
-//       color: "black",
-//     }}
-//   >
-//     <Typography align="center" sx={{ fontSize: 40 }}>
-//       The username is admin. Please email nchomeldoe@gmail.com for the password.
-//     </Typography>
-//   </Box>
-// );

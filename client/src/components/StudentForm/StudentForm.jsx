@@ -89,6 +89,7 @@ const StudentForm = ({
                   variant="outlined"
                   onClick={refreshPage}
                   disabled={isSubmitting || !dirty}
+                  sx={{ mb: 1 }}
                 >
                   Reset
                 </Button>
